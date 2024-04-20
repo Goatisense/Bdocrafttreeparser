@@ -5,3 +5,5 @@ TODO:
 some GUI or UI
 
 add resulting products rates depending on mastery and other modifiers
+
+crawl through common BDO wikias to import recipes directly
