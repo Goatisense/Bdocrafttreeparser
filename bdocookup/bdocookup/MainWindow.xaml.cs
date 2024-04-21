@@ -98,7 +98,7 @@ namespace bdocookup
                 {
                     if (m.ID == r.Material.ID)
                     {
-                        m.No = 100;
+                        m.No = 1000;
                     }
                 }
             }
@@ -115,7 +115,7 @@ namespace bdocookup
                 {
                     if (m.ID == r.Material.ID)
                     {
-                        m.No = 100;
+                        m.No = 10000;
                     }
                 }
             }
@@ -176,20 +176,31 @@ namespace bdocookup
             }
 
 
-            Material.SimulateToken res = mainrecipe.SimulateCraft(simustorage, resultindexer);
+            bool flag = false;
+            List<MaterialMap> tots = new List<MaterialMap>();
+            do
+            {
+                Material.SimulateToken res = mainrecipe.SimulateCraft(simustorage, resultindexer);
+                flag = res.possible;
+
+                tots.AddRange(res.quota);
+
+
+            } while (flag);
+
 
             //smash down
 
             List<MaterialMap> allcrafts = new List<MaterialMap>();
-            for( int i = 0; i<res.quota.Count; i++)
+            for( int i = 0; i< tots.Count; i++)
             {
                 bool contains = false;
                 for( int j = 0; j < allcrafts.Count; j++)
                 {
-                    if (res.quota[i].Material.ID == allcrafts[j].Material.ID)
+                    if (tots[i].Material.ID == allcrafts[j].Material.ID)
                     {
                         contains = true;
-                        allcrafts[j].No += res.quota[i].No;
+                        allcrafts[j].No += tots[i].No;
 
                     }
 
@@ -202,7 +213,7 @@ namespace bdocookup
                 }
                 if (!contains)
                 {
-                    allcrafts.Add(new MaterialMap() { Material = res.quota[i].Material, No = res.quota[i].No });
+                    allcrafts.Add(new MaterialMap() { Material =tots[i].Material, No = tots[i].No });
                 }
             }
 
