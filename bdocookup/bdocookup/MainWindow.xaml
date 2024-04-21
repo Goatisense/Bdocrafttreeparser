@@ -7,7 +7,29 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <TextBlock x:Name="resultings"> Hello World</TextBlock>
+
+        <StackPanel Orientation="Vertical">
+            
+            
+            <StackPanel Orientation="Horizontal">
+                <Button Click="btn_PrepStorageInFile"> Prep Storage </Button>
+                <Button Click="btn_ReadStorageFromFile">Read Storage</Button>
+
+                <Button Click="btn_MissingMaterials">Display Missing non-raw Materials( everything calculated according to bottleneck raw mat) </Button>
+                
+                
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Button Click="btn_FillmeWithRaw100">FillMeWithRaw100</Button>
+                <Button Click="btn_FillmeWithRaw1000">FillMeWithRaw1000</Button>
+                <Button Click="btn_FillmeWithRaw10000">FillMeWithRaw10000</Button>
+
+
+            </StackPanel>
+            <TextBlock x:Name="resultings"> Hello World</TextBlock>
+        </StackPanel>
+
         
     </Grid>
 </Window>

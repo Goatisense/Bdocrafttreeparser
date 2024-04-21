@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "rp+7zeGxNx2eBT3ASBFkhBDLsJR5EOr9gOfvj5nXf9VwE7loqoqMphIWSQOm7RjiytxkJW+lMCyyuouj4pZJUQ==",
+  "dgSpecHash": "uh5jBo6Oywi7G1vclwJTJ2TuS4AjvdU6SIIpxL6wQSkiJ9lOHwDB3RGeYYZUztshYfoSiK7DCMPd20PMBAdSSg==",
   "success": true,
-  "projectFilePath": "A:\\bdostuff\\bdocookup\\bdocookup\\bdocookup.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "A:\\bdostuff\\Bdocrafttreeparser\\bdocookup\\bdocookup\\bdocookup.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Magus\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+  ],
   "logs": []
 }

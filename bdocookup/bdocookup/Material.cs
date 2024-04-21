@@ -16,6 +16,10 @@ namespace bdocookup
     {
         public Material Material;
         public int No;
+
+
+
+
     }
 
 
@@ -31,6 +35,92 @@ namespace bdocookup
         public ObservableCollection<MaterialMap> Materials;
 
         public int degree = 0;
+
+
+        public class SimulateToken
+        {
+            public List<MaterialMap> quota;
+            public bool possible = true;
+        }
+        public SimulateToken SimulateCraft(Storage store, Storage crafts)
+        {
+            List<MaterialMap> materials = new List<MaterialMap>();
+
+            if( store.Use(this.ID,1) == true)
+            {
+                //no need to craft any
+
+                SimulateToken token = new SimulateToken();
+                token.quota = materials;
+                token.possible = true;
+                    
+
+                return token;
+            }
+            else
+            {
+                bool possible = true;
+                if( Materials.Count > 0){
+                    for (int i = 0; i < Materials.Count; i++)
+                    {
+                        for (int j = 0; j < Materials[i].No; j++)
+                        {
+                            var token = Materials[i].Material.SimulateCraft(store, crafts);
+                            if (!token.possible)
+                                possible = false;
+                            else
+                            {
+                                materials.AddRange(token.quota);
+                            }
+                                
+ 
+                        }
+
+                    }
+
+                    if(possible)
+                    {
+                        crafts.Produce(this.ID, 1);
+                        
+
+                        SimulateToken token = new SimulateToken();
+
+
+                        materials.Add( new MaterialMap() { Material = this, No = 1});
+                        token.quota = materials;
+                        token.possible = true;
+
+                        return token;
+
+                    }
+
+                    else {
+                        SimulateToken token = new SimulateToken();
+                        token.quota = new List<MaterialMap>();
+                        token.possible = false;
+
+                        return token;
+                    }
+                }
+                else
+                {
+
+                    //crafting not possible, end simulation
+
+                    SimulateToken token = new SimulateToken();
+                    token.quota = new List<MaterialMap>();
+                    token.possible = false;
+
+                    return token;
+
+
+                }
+
+
+            }
+
+
+        }
 
 
         public Material()
@@ -180,6 +270,57 @@ namespace bdocookup
             return crunchedList;
         }
 
+        public ObservableCollection<MaterialMap> GetAllMaterials()
+        {
+            ObservableCollection<MaterialMap> mylist = new ObservableCollection<MaterialMap>();
 
+
+
+            MaterialMap newRawMap = new MaterialMap() { No = 1, Material = (Material)this };
+            mylist.Add(newRawMap);
+            foreach (MaterialMap m in Materials)
+            {
+                var list = m.Material.GetAllMaterials();
+                for (int i = 0; i < list.Count; i++)
+                {
+                    list[i].No *= m.No;
+                    mylist.Add(list[i]);
+                }
+
+            }
+
+
+
+
+
+
+            //crunch
+            ObservableCollection<MaterialMap> crunchedList = new ObservableCollection<MaterialMap>();
+
+            for (int i = 0; i < mylist.Count; i++)
+            {
+                bool flag = false;
+                //check if curnched list has it
+                for (int c = 0; c < crunchedList.Count; c++)
+                {
+                    if (crunchedList[c].Material.ID == mylist[i].Material.ID)
+                    {
+                        flag = true;
+                        crunchedList[c].No += mylist[i].No;
+                    }
+                    else
+                    {
+
+                    }
+                }
+
+                if (!flag)
+                {
+                    crunchedList.Add(new MaterialMap() { Material = mylist[i].Material, No = mylist[i].No });
+                }
+            }
+
+            return crunchedList;
+        }
     }
 }

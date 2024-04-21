@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,7 +27,13 @@ namespace bdocookup
 
         //just demonstrates how it is used with "Simple Crone Meal" 
 
+
+        public Material mainrecipe;
         public ItemList Recipes;
+
+
+        public Storage whatihave;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -36,6 +44,189 @@ namespace bdocookup
             InitStuff();
             
         }
+
+
+        public Storage InitStorage(Material material)
+        {
+            Storage store = new Storage();
+            store.MaterialMap = new List<MaterialQuota>();
+
+
+            var mat = material.GetAllMaterials();
+            foreach (var r in material.GetAllMaterials())
+                store.MaterialMap.Add(new MaterialQuota() { ID = r.Material.ID, No = r.No });
+            return store;
+        }
+
+        public Storage InitStorageEmpty(Material material)
+        {
+            Storage store = new Storage();
+            store.MaterialMap = new List<MaterialQuota>();
+
+
+            var mat = material.GetAllMaterials();
+            foreach (var r in material.GetAllMaterials())
+                store.MaterialMap.Add(new MaterialQuota() { ID = r.Material.ID, No = 0 });
+            return store;
+        }
+
+
+        private void btn_FillmeWithRaw100( object o, EventArgs e)
+        {
+            var res2 = mainrecipe.GetMaterialsOfDegree(0);
+
+            foreach( var m in whatihave.MaterialMap)
+            {
+                foreach( var r in res2)
+                {
+                    if( m.ID == r.Material.ID)
+                    {
+                        m.No = 100;
+                    }
+                }
+            }
+        }
+
+
+        private void btn_FillmeWithRaw1000(object o, EventArgs e)
+        {
+            var res2 = mainrecipe.GetMaterialsOfDegree(0);
+
+            foreach (var m in whatihave.MaterialMap)
+            {
+                foreach (var r in res2)
+                {
+                    if (m.ID == r.Material.ID)
+                    {
+                        m.No = 100;
+                    }
+                }
+            }
+        }
+
+
+        private void btn_FillmeWithRaw10000(object o, EventArgs e)
+        {
+            var res2 = mainrecipe.GetMaterialsOfDegree(0);
+
+            foreach (var m in whatihave.MaterialMap)
+            {
+                foreach (var r in res2)
+                {
+                    if (m.ID == r.Material.ID)
+                    {
+                        m.No = 100;
+                    }
+                }
+            }
+        }
+        private void btn_PrepStorageInFile( object o, EventArgs e)
+        {
+
+            Storage storew = InitStorageEmpty(mainrecipe);
+
+            string jscriptw = JsonConvert.SerializeObject(storew, Formatting.Indented);
+
+            string pathw = Directory.GetCurrentDirectory();
+
+            using (StreamWriter wr = new StreamWriter(System.IO.Path.Combine(pathw, "materials.json")))
+            {
+                wr.Write(jscriptw);
+            }
+
+            whatihave = storew;
+
+        }
+
+        private void btn_ReadStorageFromFile(object o, EventArgs e)
+        {
+            Storage store;
+
+            string path = Directory.GetCurrentDirectory();
+
+            using (StreamReader rd = new StreamReader(System.IO.Path.Combine(path, "materials.json")))
+            {
+                var jscript = rd.ReadToEnd();
+
+                store = JsonConvert.DeserializeObject<Storage>(jscript);
+            }
+
+
+            whatihave = store;
+        }
+        private void btn_MissingMaterials(object o, EventArgs e)
+        {
+
+            Storage simustorage = new Storage();
+            simustorage.MaterialMap = new List<MaterialQuota>();
+
+
+            foreach (var i in whatihave.MaterialMap)
+            {
+                simustorage.MaterialMap.Add(new MaterialQuota() { ID = i.ID, No = i.No});
+            }
+
+
+            Storage resultindexer = new Storage();
+            resultindexer.MaterialMap = new List<MaterialQuota>();
+
+            foreach ( var i in whatihave.MaterialMap)
+            {
+                resultindexer.MaterialMap.Add(new MaterialQuota() { ID = i.ID, No = 0 });                
+            }
+
+
+            Material.SimulateToken res = mainrecipe.SimulateCraft(simustorage, resultindexer);
+
+            //smash down
+
+            List<MaterialMap> allcrafts = new List<MaterialMap>();
+            for( int i = 0; i<res.quota.Count; i++)
+            {
+                bool contains = false;
+                for( int j = 0; j < allcrafts.Count; j++)
+                {
+                    if (res.quota[i].Material.ID == allcrafts[j].Material.ID)
+                    {
+                        contains = true;
+                        allcrafts[j].No += res.quota[i].No;
+
+                    }
+
+                    else
+                    {
+
+                    }
+
+
+                }
+                if (!contains)
+                {
+                    allcrafts.Add(new MaterialMap() { Material = res.quota[i].Material, No = res.quota[i].No });
+                }
+            }
+
+
+            var res2 = allcrafts;
+
+            string empties = "";
+
+            foreach (var r in res2)
+            {
+                empties += r.Material.ID + " " + r.No + "\n";
+            }
+            resultings.Text = empties;
+
+
+
+
+
+
+        }
+
+
+
+        //returns product step ammounts
 
         public void InitStuff()
         {
@@ -127,7 +318,11 @@ namespace bdocookup
             var res = main.GetAllRawResources();
 
             //gets nth depth materials
-            var res2 = main.GetMaterialsOfDegree(1);
+            var res2 = main.GetMaterialsOfDegree(0);
+
+            mainrecipe = main;
+
+
 
 
             //2ndlevel recipes
@@ -155,7 +350,25 @@ namespace bdocookup
             }
             int a = 123;
             resultings.Text = empties;
+
+
+            //initstorage
+
+
+
+            //readstorage
+
+
+
+
+
+
+
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "A:\\bdostuff\\bdocookup\\bdocookup\\bdocookup.csproj": {}
+    "A:\\bdostuff\\Bdocrafttreeparser\\bdocookup\\bdocookup\\bdocookup.csproj": {}
   },
   "projects": {
-    "A:\\bdostuff\\bdocookup\\bdocookup\\bdocookup.csproj": {
+    "A:\\bdostuff\\Bdocrafttreeparser\\bdocookup\\bdocookup\\bdocookup.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "A:\\bdostuff\\bdocookup\\bdocookup\\bdocookup.csproj",
+        "projectUniqueName": "A:\\bdostuff\\Bdocrafttreeparser\\bdocookup\\bdocookup\\bdocookup.csproj",
         "projectName": "bdocookup",
-        "projectPath": "A:\\bdostuff\\bdocookup\\bdocookup\\bdocookup.csproj",
+        "projectPath": "A:\\bdostuff\\Bdocrafttreeparser\\bdocookup\\bdocookup\\bdocookup.csproj",
         "packagesPath": "C:\\Users\\Magus\\.nuget\\packages\\",
-        "outputPath": "A:\\bdostuff\\bdocookup\\bdocookup\\obj\\",
+        "outputPath": "A:\\bdostuff\\Bdocrafttreeparser\\bdocookup\\bdocookup\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -42,6 +42,12 @@
       "frameworks": {
         "net6.0-windows7.0": {
           "targetAlias": "net6.0-windows",
+          "dependencies": {
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
